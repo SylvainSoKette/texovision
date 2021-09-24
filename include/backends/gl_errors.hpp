@@ -6,14 +6,14 @@
 #include <GL/glew.h>
 
 
-#define GLCall(x) GLError::clear(); x; GLError::check(#x, __FILE__, __LINE__)
+#define GLCall(x) txo::GLError::clear(); x; txo::GLError::check(#x, __FILE__, __LINE__)
 
 namespace txo {
 
 namespace GLError
 {
 	void clear() { while(glGetError() != GL_NO_ERROR); }
-	
+
 	void check(const char* function, const char* file, const int line)
 	{
 		while(GLenum error = glGetError())
@@ -96,7 +96,7 @@ namespace GLError
 
 		std::cerr << "[GL " << _type << "]: "
 			<< "(severity: " << _severity << ")"
-			<< "\n\tSource: "<< _source 
+			<< "\n\tSource: "<< _source
 			<< "\n\tType: " << _type
 			<< "\n\tMessage: " << message << std::endl;
 	}

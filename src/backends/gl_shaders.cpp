@@ -23,7 +23,7 @@ namespace txo {
 					default: shaderTypeStr = "???"; break;
 			}
 
-			ERR("[GL Error]: Failed to compile " << shaderTypeStr << " shader: " << infoLogContent);
+			ERR("GL Error: Failed to compile " << shaderTypeStr << " shader: " << infoLogContent);
 		}
 	}
 
@@ -37,7 +37,7 @@ namespace txo {
 
 	std::vector<ShaderSource> ShaderProgram::parseShaders(std::string source) {
 		std::vector<ShaderSource> shaderSources;
-		std::istringstream sourceStream(source);
+		std::istringstream sourceStream{source};
 
 		for (std::string line; std::getline(sourceStream, line); )
 		{
@@ -66,8 +66,8 @@ namespace txo {
 	}
 
 	void ShaderProgram::addShader(GLenum type, std::string source) {
-		GLuint shader = glCreateShader(type);
-		const char *shaderSource = source.c_str();
+		GLuint shader {glCreateShader(type)};
+		const char *shaderSource {source.c_str()};
 		glShaderSource(shader, 1, &shaderSource, nullptr);
 
 		glCompileShader(shader);
@@ -99,32 +99,32 @@ namespace txo {
 	}
 
 	void ShaderProgram::setUniform(const char* name, float value) {
-		GLint location = glGetUniformLocation(id, name);
+		GLint location {glGetUniformLocation(id, name)};
 		if (location != -1) glUniform1f(location, value);
 	}
 
 	void ShaderProgram::setUniform(const char* name, float x, float y) {
-		GLint location = glGetUniformLocation(id, name);
+		GLint location {glGetUniformLocation(id, name)};
 		if (location != -1) glUniform2f(location, x, y);
 	}
 
 	void ShaderProgram::setUniform(const char* name, float x, float y, float z) {
-		GLint location = glGetUniformLocation(id, name);
+		GLint location {glGetUniformLocation(id, name)};
 		if (location != -1) glUniform3f(location, x, y, z);
 	}
 
 	void ShaderProgram::setUniform(const char* name, const glm::vec3 v) {
-		GLint location = glGetUniformLocation(id, name);
+		GLint location {glGetUniformLocation(id, name)};
 		if (location != -1) glUniform3fv(location, 1, glm::value_ptr(v));
 	}
 
 	void ShaderProgram::setUniform(const char* name, float r, float g, float b, float a) {
-		GLint location = glGetUniformLocation(id, name);
+		GLint location {glGetUniformLocation(id, name)};
 		if (location != -1) glUniform4f(location, r, g, b, a);
 	}
 
 	void ShaderProgram::setUniform(const char* name, const glm::mat4 mat) {
-		GLint location = glGetUniformLocation(id, name);
+		GLint location {glGetUniformLocation(id, name)};
 		if (location != -1) glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 

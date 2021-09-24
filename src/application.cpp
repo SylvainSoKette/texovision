@@ -26,7 +26,7 @@ Application::~Application() {
 */
 void Application::_init_SDL() {
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
-		const char* errorMsg = "Problem while initializing SDL";
+		const char* errorMsg {"Problem while initializing SDL"};
 		ERR(errorMsg << ": " << SDL_GetError());
 		throw std::runtime_error(errorMsg);
 	}
@@ -52,7 +52,7 @@ void Application::_init_window() {
 	);
 
 	if (!window) {
-		const char* errorMsg = "Problem while initializing window";
+		const char* errorMsg {"Problem while initializing window"};
 		ERR(errorMsg << ": " << SDL_GetError());
 		throw std::runtime_error(errorMsg);
 	}
@@ -64,7 +64,7 @@ void Application::_init_opengl_context() {
 	SDL_GL_SetSwapInterval(1); // vsync, on va eviter de cramer mon pc
 
 	if (glewInit() != GLEW_OK) {
-		const char* errorMsg = "Failed to initialize OpenGL loader";
+		const char* errorMsg {"Failed to initialize OpenGL loader"};
 		ERR(errorMsg);
 		throw std::runtime_error(errorMsg);
 	}
@@ -74,7 +74,7 @@ void Application::_init_imgui_context() {
 	IMGUI_CHECKVERSION();
 	imguiContext = ImGui::CreateContext();
 	if (!imguiContext) {
-		const char* errorMsg = "Failed to initialize ImGui context";
+		const char* errorMsg {"Failed to initialize ImGui context"};
 		ERR(errorMsg);
 		throw std::runtime_error(errorMsg);
 	}
@@ -108,16 +108,12 @@ void Application::_end_imgui_context() noexcept {
 */
 void Application::start() {
 	SDL_Event event;
-	u32	nowTime;
-	u32	lastTime;
 	u32 frameTime;
-	double deltaTime;
-	bool redraw = true;
-	bool quit = false;
-
-	nowTime = SDL_GetTicks();
-	lastTime = 0;
-	deltaTime = 0;
+	bool redraw {false}; // old variable no longer in use
+	bool quit {false};
+	double deltaTime {0};
+	u32 lastTime {0};
+	u32 nowTime {SDL_GetTicks()};
 
 	init();
 

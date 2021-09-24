@@ -1,15 +1,15 @@
 #include "quad.hpp"
 
 
-static const char* VERTEX_SHADER_SOURCE = "#version 450 core\n"
+static const char* VERTEX_SHADER_SOURCE {"#version 450 core\n"
 	"\n"
 	"layout (location=0) in vec2 vertPos;\n"
 	"layout (location=0) in vec2 texCoord;\n"
 	"\n"
 	"void main() {\n"
 	"	gl_Position = vec4(vertPos.x, vertPos.y, 1.0f, 1.0f);\n" // such passthrough, so beautiful, wow
-	"}\n";
-static const char* FRAGMENT_SHADER_SOURCE = "#version 450 core\n"
+	"}\n"};
+static const char* FRAGMENT_SHADER_SOURCE {"#version 450 core\n"
 	"\n"
 	"out vec4 fragColor;\n"
 	"\n"
@@ -20,7 +20,7 @@ static const char* FRAGMENT_SHADER_SOURCE = "#version 450 core\n"
 	"		1.0f,"
 	"		1.0f"
 	"	);"
-	"}\n";
+	"}\n"};
 
 namespace txo {
 
@@ -54,8 +54,6 @@ namespace txo {
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 		glEnableVertexAttribArray(txo::VertexAttrib::POSITION);
 		glVertexAttribPointer(txo::VertexAttrib::POSITION, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-		// ou bien, puisqu'on a du tightly-packed data dans le buffer 'vertices':
-		// glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	}
 
 	void Quad::render() {
