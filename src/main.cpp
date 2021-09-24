@@ -30,8 +30,8 @@ struct Texovision : txo::Application {
 	}
 
 	void render_imgui() override {
-		static int facet_number = 10;
-		static float sensitivity = 0.3f;
+		static int facet_number {10};
+		static float sensitivity {0.3f};
 
 		ImGui::Begin("Voronoi texture");
 		ImGui::SetWindowSize(ImVec2{320, 600});
