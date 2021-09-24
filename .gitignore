@@ -1,0 +1,11 @@
+# specific files
+texovision
+imgui.ini
+TODO.md
+
+# group of specific files
+obj/**/*.o
+obj/**/*.d
+
+# IDE folders
+.vscode/
