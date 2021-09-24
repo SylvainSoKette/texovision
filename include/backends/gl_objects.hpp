@@ -51,7 +51,7 @@ struct BufferObject {
 			attrib_size,
 			t,
 			GL_FALSE,
-			sizeof(GLfloat) * per_vertex_size,
+			sizeof(T) * per_vertex_size,
 			(void*)(stride * sizeof(T))
 		);
 	}
