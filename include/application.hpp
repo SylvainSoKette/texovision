@@ -47,7 +47,7 @@ namespace txo {
 		const int WINDOW_WIDTH {960};
 		const int WINDOW_HEIGHT {960};
 		const SDL_WindowFlags WINDOW_FLAGS {(SDL_WindowFlags)(
-			SDL_WINDOW_BORDERLESS |
+			// SDL_WINDOW_BORDERLESS |
 			SDL_WINDOW_OPENGL |
 			SDL_WINDOW_ALLOW_HIGHDPI
 		)};

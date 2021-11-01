@@ -1,27 +1,6 @@
 #include "quad.hpp"
 
 
-static const char* VERTEX_SHADER_SOURCE {"#version 450 core\n"
-	"\n"
-	"layout (location=0) in vec2 vertPos;\n"
-	"layout (location=0) in vec2 texCoord;\n"
-	"\n"
-	"void main() {\n"
-	"	gl_Position = vec4(vertPos.x, vertPos.y, 1.0f, 1.0f);\n" // such passthrough, so beautiful, wow
-	"}\n"};
-static const char* FRAGMENT_SHADER_SOURCE {"#version 450 core\n"
-	"\n"
-	"out vec4 fragColor;\n"
-	"\n"
-	"void main() {\n"
-	"	fragColor = vec4("
-	"		gl_FragCoord.x / 960,"
-	"		gl_FragCoord.y / 540,"
-	"		1.0f,"
-	"		1.0f"
-	"	);"
-	"}\n"};
-
 namespace txo {
 
 	Quad::Quad(glm::vec2 top_left, glm::vec2 top_right, glm::vec2 bottom_right, glm::vec2 bottom_left) noexcept :
@@ -30,40 +9,78 @@ namespace txo {
 		bottomRight{bottom_right},
 		bottomLeft{bottom_left},
 		vertices {
-			bottomLeft.x, bottomLeft.y,
-			topLeft.x, topLeft.y,
-			topRight.x, topRight.y,
-			topRight.x, topRight.y,
-			bottomRight.x, bottomRight.y,
-			bottomLeft.x, bottomLeft.y,
+		//	x              y              u      v
+			bottomLeft.x,  bottomLeft.y,  0.0f, 0.0f,
+			topLeft.x,     topLeft.y,     0.0f, 1.0f,
+			topRight.x,    topRight.y,    1.0f, 1.0f,
+			topRight.x,    topRight.y,    1.0f, 1.0f,
+			bottomRight.x, bottomRight.y, 1.0f, 0.0f,
+			bottomLeft.x,  bottomLeft.y,  0.0f, 0.0f
 		} {}
 
 	void Quad::init() {
+	/*
+		Init OpenGL data for this object.
+		At this point, OpenGL context must have been initialized.
+	*/
 		std::string shaderSources { txo::read_file("res/quad.glsl") };
 		shaderProgram = new ShaderProgram();
 		shaderProgram->addShaders(shaderSources);
 		shaderProgram->link();
 
-		// // VAO
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
+		// VAO
+		arrayObject = new ArrayObject();
+		arrayObject->bind();
 
-		// // VBO
+		// VBO
 		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
 		glEnableVertexAttribArray(txo::VertexAttrib::POSITION);
-		glVertexAttribPointer(txo::VertexAttrib::POSITION, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+		glVertexAttribPointer(
+			txo::VertexAttrib::POSITION,
+			2, GL_FLOAT, GL_FALSE,
+			4 * sizeof(float),
+			(void*)(0)
+		);
+		glEnableVertexAttribArray(txo::VertexAttrib::UV);
+		glVertexAttribPointer(
+			txo::VertexAttrib::UV,
+			2, GL_FLOAT, GL_FALSE,
+			4 * sizeof(float),
+			(void*)(2 * sizeof(float))
+		);
+
+		// texture binding
+		textureObject = new TextureObject();
 	}
 
 	void Quad::render() {
-		// activate shader program and vao then ask for render
 		shaderProgram->bind();
-		// glUseProgram(shaderProgram);
-		glBindVertexArray(vao);
+
+		if (texture) {
+			// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glActiveTexture.xhtml
+			glActiveTexture(GL_TEXTURE0);
+			textureObject->bind();
+		}
+
+		arrayObject->bind();
 		glDrawArrays(GL_TRIANGLES, 0, 2 * 3);
 
+		if (texture) textureObject->unbind();
+
+		arrayObject->unbind();
 		shaderProgram->unbind();
+	}
+
+	void Quad::update_texture() {
+		textureObject->bind();
+		textureObject->setData(
+			texture->size,
+			texture->pixels.data()
+		);
+		textureObject->unbind();
 	}
 
 } // namespace txo
