@@ -24,15 +24,15 @@ namespace txo {
 		At this point, OpenGL context must have been initialized.
 	*/
 		std::string shaderSources { txo::read_file("res/quad.glsl") };
-		shaderProgram = new ShaderProgram();
+		shaderProgram = std::make_unique<txo::ShaderProgram>();
 		shaderProgram->addShaders(shaderSources);
 		shaderProgram->link();
 
 		// VAO
-		arrayObject = new ArrayObject();
+		arrayObject = std::make_unique<txo::ArrayObject>();
 		arrayObject->bind();
 
-		// VBO
+		// VBO// need to instantiate it when opengl context is ready to be used
 		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -53,7 +53,7 @@ namespace txo {
 		);
 
 		// texture binding
-		textureObject = new TextureObject();
+		textureObject = std::make_unique<txo::TextureObject>();
 	}
 
 	void Quad::render() {

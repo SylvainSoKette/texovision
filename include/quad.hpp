@@ -19,7 +19,7 @@ namespace txo {
 		void init();
 		void render();
 
-		txo::Texture *texture;
+		txo::Texture* texture;
 
 		void update_texture();
 	private:
@@ -29,13 +29,13 @@ namespace txo {
 		glm::vec2 bottomLeft;
 		float vertices[2 * 3 * 4]; // 2 triangles, 3 vertices per triangle, 4 values per vertex : x, y, u, v
 
-		txo::ShaderProgram *shaderProgram; // need to instantiate it when opengl context is ready to be used
-
-		txo::ArrayObject *arrayObject;
-		uint vao;
-		txo::BufferObject<float> *bufferObject;
+		// opengl objects requires opengl context to be initialized,
+		// so we just keep pointers and link to those when ready.
+		std::unique_ptr<txo::ShaderProgram> shaderProgram;
+		std::unique_ptr<txo::ArrayObject> arrayObject;
+		std::unique_ptr<txo::BufferObject<float>> bufferObject;
 		uint vbo;
-		txo::TextureObject *textureObject;
+		std::unique_ptr<txo::TextureObject> textureObject;
 	};
 
 } // namespace txo
